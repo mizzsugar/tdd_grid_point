@@ -1,5 +1,9 @@
 from __future__ import annotations
-from typing import NamedTuple
+import collections
+from typing import (
+    NamedTuple,
+    Tuple,
+)
 
 
 class GridPoint(NamedTuple):
@@ -21,3 +25,8 @@ class GridPoint(NamedTuple):
             (is_serial(self.x, other.x) and self.y == other.y)
             or (self.x == other.x and is_serial(self.y, other.y))
         )
+
+
+class GridPoints(collections.UserList):
+    def __init__(self, *grid_points: Tuple[GridPoint, ...]) -> None:
+        self.data = list(grid_points)
