@@ -85,3 +85,11 @@ class TestGridPoints:
     def test_not_connected(self, points):
         grid_points = (gridpoint.GridPoint(*point) for point in points)
         assert not gridpoint.GridPoints(*grid_points).connected()
+
+    @pytest.mark.parametrize("points, expect", [
+        ([(0, 0), (0, 0)], 2),
+        ([(0, 0), (1, 1), (1, 2)], 3),
+    ])
+    def test_count_gridpoint(self, points, expect):
+        grid_points = (gridpoint.GridPoint(*point) for point in points)
+        assert len(gridpoint.GridPoints(*grid_points)) == expect
