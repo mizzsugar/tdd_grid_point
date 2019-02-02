@@ -64,3 +64,19 @@ class TestGridPoints:
         gridpoint_c = gridpoint.GridPoint(*c)
         gridpoints = gridpoint.GridPoints(gridpoint_a, gridpoint_b)
         assert gridpoint_c not in gridpoints
+
+    @pytest.mark.parametrize("points", [
+        ((0, 0), (0, 1)),
+        ((1, 0), (1, 1)),
+    ])
+    def test_connected(self, points):
+        grid_points = (gridpoint.GridPoint(*point) for point in points)
+        assert gridpoint.GridPoints(*grid_points).connected
+
+    @pytest.mark.parametrize("points", [
+        ((0, 0), (0, 0)),
+        ((0, 0), (1, 1)),
+    ])
+    def test_not_connected(self, points):
+        grid_points = (gridpoint.GridPoint(*point) for point in points)
+        assert not gridpoint.GridPoints(*grid_points).connected
