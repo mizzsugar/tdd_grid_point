@@ -14,7 +14,10 @@ class GridPoint(NamedTuple):
 
         隣接とはある点の上下左右の一方向に一点分動いた位置を言う。
         """
+        def is_serial(a: int, b: int) -> bool:
+            return abs(a - b) == 1
+
         return (
-                (abs(self.x - other.x) == 1 and self.y == other.y)
-                or (self.x == other.x and (abs(self.y - other.y) == 1))
+            (is_serial(self.x, other.x) and self.y == other.y)
+            or (self.x == other.x and is_serial(self.y, other.y))
         )
