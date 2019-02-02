@@ -32,7 +32,7 @@ class TestGridPoint:
         ((0, 0), (1, 0)),
         ((0, -1), (0, 0)),
     ])
-    def test_is_next_to(self, a, b) -> bool:
+    def test_is_next_to(self, a, b):
         assert gridpoint.GridPoint(*a).is_next_to(gridpoint.GridPoint(*b))
 
     @pytest.mark.parametrize("a, b", [
@@ -40,7 +40,7 @@ class TestGridPoint:
         ((1, 1), (0, 0)),
         ((0, -1), (-1, 0)),
     ])
-    def test_is_not_next_to(self, a, b) -> bool:
+    def test_is_not_next_to(self, a, b):
         assert not gridpoint.GridPoint(*a).is_next_to(gridpoint.GridPoint(*b))
 
 
@@ -48,7 +48,7 @@ class TestGridPoints:
     @pytest.mark.parametrize("a, b", [
         ((0, 0), (0, 1)),
     ])
-    def test_contains(self, a, b) -> bool:
+    def test_contains(self, a, b):
         gridpoint_a = gridpoint.GridPoint(*a)
         gridpoint_b = gridpoint.GridPoint(*b)
         gridpoints = gridpoint.GridPoints(gridpoint_a, gridpoint_b)
@@ -58,9 +58,25 @@ class TestGridPoints:
     @pytest.mark.parametrize("a, b, c", [
         ((0, 0), (0, 1), (0, 2)),
     ])
-    def test_not_contains(self, a, b, c) -> bool:
+    def test_not_contains(self, a, b, c):
         gridpoint_a = gridpoint.GridPoint(*a)
         gridpoint_b = gridpoint.GridPoint(*b)
         gridpoint_c = gridpoint.GridPoint(*c)
         gridpoints = gridpoint.GridPoints(gridpoint_a, gridpoint_b)
         assert gridpoint_c not in gridpoints
+
+    @pytest.mark.parametrize("points", [
+        ((0, 0), (0, 1)),
+        ((1, 0), (1, 1)),
+    ])
+    def test_connected(self, points):
+        grid_points = (gridpoint.GridPoint(*point) for point in points)
+        assert gridpoint.GridPoints(*grid_points).connected()
+
+    @pytest.mark.parametrize("points", [
+        ((0, 0), (0, 0)),
+        ((0, 0), (1, 1)),
+    ])
+    def test_not_connected(self, points):
+        grid_points = (gridpoint.GridPoint(*point) for point in points)
+        assert not gridpoint.GridPoints(*grid_points).connected()

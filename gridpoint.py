@@ -30,3 +30,8 @@ class GridPoint(NamedTuple):
 class GridPoints(collections.UserList):
     def __init__(self, *grid_points: Tuple[GridPoint, ...]) -> None:
         self.data = list(grid_points)
+
+    def connected(self) -> bool:
+        """内包するGridPointが隣接している場合にTrueを返す。それ以外はFalse。
+        """
+        return self[0].is_next_to(self[1])
