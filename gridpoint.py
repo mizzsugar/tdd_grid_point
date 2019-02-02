@@ -31,6 +31,8 @@ class GridPoint(NamedTuple):
 
 class GridPoints(collections.UserList):
     def __init__(self, *grid_points: Tuple[GridPoint, ...]) -> None:
+        if len(set(grid_points)) != len(grid_points):
+            raise ValueError("Conflict")
         self.data = list(grid_points)
 
     def connected(self) -> bool:

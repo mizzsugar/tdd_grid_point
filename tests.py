@@ -77,7 +77,6 @@ class TestGridPoints:
         assert gridpoint.GridPoints(*grid_points).connected()
 
     @pytest.mark.parametrize("points", [
-        ((0, 0), (0, 0)),
         ((0, 0), (1, 1)),
         ((0, 0), (1, 1), (2, 2)),
         ((0, 0), (1, 1), (1, 2)),
@@ -87,9 +86,17 @@ class TestGridPoints:
         assert not gridpoint.GridPoints(*grid_points).connected()
 
     @pytest.mark.parametrize("points, expect", [
-        ([(0, 0), (0, 0)], 2),
+        ([(0, 0), (0, 1)], 2),
         ([(0, 0), (1, 1), (1, 2)], 3),
     ])
     def test_count_gridpoint(self, points, expect):
         grid_points = (gridpoint.GridPoint(*point) for point in points)
         assert len(gridpoint.GridPoints(*grid_points)) == expect
+
+    @pytest.mark.parametrize("points", [
+        ((0, 0), (0, 1), (0, 2), (0, 2)),
+    ])
+    def test_given_same_gridpoint(self, points):
+        grid_points = (gridpoint.GridPoint(*point) for point in points)
+        with pytest.raises(ValueError):
+            gridpoint.GridPoints(*grid_points)
