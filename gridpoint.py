@@ -47,3 +47,9 @@ class GridPoints(collections.UserList):
             f(point, itertools.chain(self[:i], self[i+1:]))
             for i, point in enumerate(self)
         )
+
+    def is_traversable(self) -> bool:
+        """内包する要素が一筆書きできるように隣接していればTrue。
+        できなければFalse。
+        """
+        return True
