@@ -14,5 +14,7 @@ class GridPoint(NamedTuple):
 
         隣接とはある点の上下左右の一方向に一点分動いた位置を言う。
         """
-        # Stub
-        return True
+        return (
+                (abs(self.x - other.x) == 1 and self.y == other.y)
+                or (self.x == other.x and (abs(self.y - other.y) == 1))
+        )
