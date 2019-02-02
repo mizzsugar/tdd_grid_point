@@ -68,6 +68,9 @@ class TestGridPoints:
     @pytest.mark.parametrize("points", [
         ((0, 0), (0, 1)),
         ((1, 0), (1, 1)),
+        ((0, 0), (0, 1), (0, 2)),
+        ((0, 0), (1, 0), (0, 1)),
+        ((0, 0), (1, 1), (1, 0)),
     ])
     def test_connected(self, points):
         grid_points = (gridpoint.GridPoint(*point) for point in points)
@@ -76,6 +79,8 @@ class TestGridPoints:
     @pytest.mark.parametrize("points", [
         ((0, 0), (0, 0)),
         ((0, 0), (1, 1)),
+        ((0, 0), (1, 1), (2, 2)),
+        ((0, 0), (1, 1), (1, 2)),
     ])
     def test_not_connected(self, points):
         grid_points = (gridpoint.GridPoint(*point) for point in points)

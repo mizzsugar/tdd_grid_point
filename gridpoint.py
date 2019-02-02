@@ -1,6 +1,8 @@
 from __future__ import annotations
 import collections
+import itertools
 from typing import (
+    Iterable,
     NamedTuple,
     Tuple,
 )
@@ -32,6 +34,14 @@ class GridPoints(collections.UserList):
         self.data = list(grid_points)
 
     def connected(self) -> bool:
-        """内包するGridPointが隣接している場合にTrueを返す。それ以外はFalse。
+        """内包する要素のいずれかが他全てと隣接していればTrue。それ以外は
+        False。
         """
-        return self[0].is_next_to(self[1])
+
+        def f(point: GridPoint, others: Iterable[GridPoint]) -> bool:
+            return all(point.is_next_to(other) for other in others)
+
+        return any(
+            f(point, itertools.chain(self[:i], self[i+1:]))
+            for i, point in enumerate(self)
+        )
