@@ -1,4 +1,4 @@
 #!/bin/sh
-pytest tests.py
-flake8 .
+pytest -v tests.py
+flake8 gridpoint.py tests.py
 mypy gridpoint.py
