@@ -34,5 +34,4 @@ class GridPoints(collections.UserList):
     def connected(self) -> bool:
         """内包するGridPointが隣接している場合にTrueを返す。それ以外はFalse。
         """
-        # Stub
-        return True
+        return self[0].is_next_to(self[1])

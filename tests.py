@@ -71,7 +71,7 @@ class TestGridPoints:
     ])
     def test_connected(self, points):
         grid_points = (gridpoint.GridPoint(*point) for point in points)
-        assert gridpoint.GridPoints(*grid_points).connected
+        assert gridpoint.GridPoints(*grid_points).connected()
 
     @pytest.mark.parametrize("points", [
         ((0, 0), (0, 0)),
@@ -79,4 +79,4 @@ class TestGridPoints:
     ])
     def test_not_connected(self, points):
         grid_points = (gridpoint.GridPoint(*point) for point in points)
-        assert not gridpoint.GridPoints(*grid_points).connected
+        assert not gridpoint.GridPoints(*grid_points).connected()
