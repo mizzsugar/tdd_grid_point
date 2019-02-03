@@ -5,7 +5,7 @@ from typing import (
     Iterable,
     NamedTuple,
     Tuple,
-)
+    Set)
 
 
 class GridPoint(NamedTuple):
@@ -47,3 +47,19 @@ class GridPoints(collections.UserList):
             f(point, itertools.chain(self[:i], self[i+1:]))
             for i, point in enumerate(self)
         )
+
+    def is_traversable(self) -> bool:
+        """内包する要素が一筆書きできるように隣接していればTrue。
+                できなければFalse。
+        """
+        def f(point: GridPoint, others: Set[GridPoint]) -> bool:
+            if not others:
+                return True
+
+            return any(
+                point.is_next_to(other) and f(other, others - set([other]))
+                for other in others
+            )
+
+        points = set(self)
+        return any(f(point, points - set(point)) for point in points)

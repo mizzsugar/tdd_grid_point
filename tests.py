@@ -100,3 +100,19 @@ class TestGridPoints:
         grid_points = (gridpoint.GridPoint(*point) for point in points)
         with pytest.raises(ValueError):
             gridpoint.GridPoints(*grid_points)
+
+    @pytest.mark.parametrize("points", [
+        ((0, 0), (0, 1), (0, 2), (0, 3)),
+        ((0, 0), (0, 3), (0, 2), (0, 1)),
+        ((0, 0), (1, 0), (1, 1), (1, 2)),
+    ])
+    def test_is_traversable(self, points):
+        grid_points = (gridpoint.GridPoint(*point) for point in points)
+        assert gridpoint.GridPoints(*grid_points).is_traversable()
+
+    @pytest.mark.parametrize("points", [
+        ((0, 0), (0, 1), (0, 2), (0, 4)),
+    ])
+    def test_is_not_traversable(self, points):
+        grid_points = (gridpoint.GridPoint(*point) for point in points)
+        assert not gridpoint.GridPoints(*grid_points).is_traversable()
