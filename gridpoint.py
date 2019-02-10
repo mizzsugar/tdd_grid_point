@@ -2,20 +2,27 @@ from __future__ import annotations
 import collections
 import itertools
 from typing import (
+    Generic,
     Iterable,
-    NamedTuple,
+    Iterator,
     Tuple,
-    Set)
+    TypeVar,
+    Set,
+)
 
 
-class GridPoint(NamedTuple):
-    x: int
-    y: int
+T = TypeVar("T", bound=Tuple[int, ...])
+U = TypeVar("U", bound="GridPoint")
+
+
+class GridPoint(tuple, Generic[T]):
+    def __new__(cls, *args: int) -> GridPoint[T]:
+        return super().__new__(cls, args)
 
     def __str__(self) -> str:
-        return f"({self.x}, {self.y})"
+        return "({})".format(', '.join(str(i) for i in self))
 
-    def is_next_to(self, other: GridPoint) -> bool:
+    def is_next_to(self, other: GridPoint[T]) -> bool:
         """与えられた格子点が自身と隣接していればTrueを返す。それ以外はFalse。
 
         隣接とはある点の上下左右の一方向に一点分動いた位置を言う。
@@ -23,14 +30,26 @@ class GridPoint(NamedTuple):
         def is_serial(a: int, b: int) -> bool:
             return abs(a - b) == 1
 
-        return (
-            (is_serial(self.x, other.x) and self.y == other.y)
-            or (self.x == other.x and is_serial(self.y, other.y))
+        def sub(t: Tuple[int, ...], i: int) -> Tuple[int, ...]:
+            return t[:i] + t[i + 1:]
+
+        pair: Iterator[Tuple[int, int]] = zip(self, other)
+        return any(
+            is_serial(element_a, element_b) and sub(self, i) == sub(other, i)
+            for i, (element_a, element_b) in enumerate(pair)
         )
 
 
+class GridPoint2D(GridPoint[Tuple[int, int]]):
+    pass
+
+
+class GridPoint3D(GridPoint[Tuple[int, int, int]]):
+    pass
+
+
 class GridPoints(collections.UserList):
-    def __init__(self, *grid_points: Tuple[GridPoint, ...]) -> None:
+    def __init__(self, *grid_points: Tuple[U, ...]) -> None:
         if len(set(grid_points)) != len(grid_points):
             raise ValueError("Conflict")
         self.data = list(grid_points)
@@ -40,7 +59,7 @@ class GridPoints(collections.UserList):
         False。
         """
 
-        def f(point: GridPoint, others: Iterable[GridPoint]) -> bool:
+        def f(point: U, others: Iterable[U]) -> bool:
             return all(point.is_next_to(other) for other in others)
 
         return any(
@@ -50,9 +69,9 @@ class GridPoints(collections.UserList):
 
     def is_traversable(self) -> bool:
         """内包する要素が一筆書きできるように隣接していればTrue。
-                できなければFalse。
+        できなければFalse。
         """
-        def f(point: GridPoint, others: Set[GridPoint]) -> bool:
+        def f(point: U, others: Set[U]) -> bool:
             if not others:
                 return True
 
